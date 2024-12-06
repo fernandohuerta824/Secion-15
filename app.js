@@ -1,10 +1,10 @@
 const path = require('path');
-
+const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session')
 const MongoDBStore = require('connect-mongo')
-
+// const https = require('https')
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
@@ -16,13 +16,22 @@ const Csrf = require('csrf')
 const flash = require('connect-flash');
 const { handler505 } = require('./controllers/500');
 const multer = require('multer')
-const crypto = require('crypto')
+const crypto = require('crypto');
+const { default: helmet } = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan');
 
-const uri = "mongodb+srv://nodejsmax:cr7eselmejorjugador@cluster0.njj8za8.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0";
+require('dotenv').config();
+
+const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.njj8za8.mongodb.net/${process.env.MONGO_DATABASE_NAME}?retryWrites=true&w=majority&appName=Cluster0`;
 // const User = require('./models/user');
 
 
 const app = express();
+
+// const privateKey = fs.readFileSync('server.key')
+// const certificate = fs.readFileSync('server.cert')
+
 
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -43,10 +52,17 @@ const fileFilter = (req, file, cb) => {
         cb(null, false)
 }
 
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+
 app.set('view engine', 'ejs');
+// app.use(helmet({strictTransportSecurity: false}))
+app.use(compression())
+// app.use(morgan('combined', { stream: accessLogStream }))
+
+
 
 app.use(session({
-    secret: 'cr7eselmejorjugador',
+    secret: process.env.SECRET_SESSION,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -123,7 +139,8 @@ app.use((error, req, res, next) => {
 
 mongoose.connect(uri, {serverApi: {version: '1', strict: true, deprecationErrors: true}, dbName: 'shop', minPoolSize: 1, maxPoolSize: 10})
 .then(result => {
-    app.listen(3001, () => console.log('Server running on port ' + 3001))  
+    // https.createServer({key: privateKey, cert: certificate}, app).listen(process.env.PORT || 3001, () => console.log('Server running on port ' + (process.env.PORT || 3001)))  
+    app.listen(process.env.PORT || 3001, () => console.log('Server running on port ' + (process.env.PORT || 3001)))
 })
 .catch(error => console.log(error));
 

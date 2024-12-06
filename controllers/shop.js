@@ -7,8 +7,8 @@ const Order = require('../models/order');
 const PDFDocument = require('pdfkit');
 const User = require('../models/user');
 const stripe = require('stripe')
-
-const payment = new stripe.Stripe('sk_test_51Q9XvEFg7N67dTvFziFuOfWrIvqUNcAdnuD2wZ9PvD6nHb3KcWYVRvA7ZYVPbIZaUxEbpZ18B72av2xfPBZiUpCm00psWpwNlY')
+require('dotenv').config();
+const payment = new stripe.Stripe(process.env.STRIPE_KEY)
 
 
 
