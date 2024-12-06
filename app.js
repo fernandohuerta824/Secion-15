@@ -115,7 +115,7 @@ app.use(async (req, res, next) => {
 app.use(flash());
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/images', express.static(path.join(rootDir, 'images')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
