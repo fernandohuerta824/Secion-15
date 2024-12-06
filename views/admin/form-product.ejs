@@ -1,0 +1,48 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+   <%- include('../includes/header.ejs') %>
+   
+    <main>
+        <form class="product-form" action="/admin/<%=  editing ? 'edit-product' : 'add-product'%>" method="POST"  enctype="multipart/form-data">
+
+           
+            <div class="form-control ">
+                <%- include('../includes/error.ejs', error = values.title.error) %>
+                <label for="title">Title</label>
+                <input type="text" name="title" id="title" value="<%= values.title.value %>">
+            </div>
+            
+            
+
+            <div class="form-control <%= values.image.class %>">
+                <%- include('../includes/error.ejs', error = values.image.error) %>
+                <label for="image">Image</label>
+                <input type="file" name="image" id="image" accept="image/*">
+            </div>
+
+            
+
+            <div class="form-control <%= values.price.class %>">
+                <%- include('../includes/error.ejs', error = values.price.error) %>
+                <label for="price">Price</label>
+                <input type="number" name="price" id="price" step="0.01" value="<%= values.price.value ?   values.price.value : ''%>">
+            </div>
+
+            <div class="form-control <%= values.description.class %>">
+                <%- include('../includes/error.ejs', error = values.description.error) %>
+                <label for="description">Description</label>
+                <textarea name="description" id="description" rows="5"><%= values.description.value ?   values.description.value : ''%></textarea>
+            </div>
+
+            <% if (editing) { %>
+                <input type="hidden" name="id" id="id" value="<%= values.id %>">
+            <% } %>
+            <input type="hidden" name="_csrfProductForm" value="<%= csrfToken%>">
+            <button class="btn" type="submit"><%= editing ?  'Update Product' : 'Add Product'%></button>
+        </form>
+    </main>
+<%- include('../includes/footer.ejs') %>

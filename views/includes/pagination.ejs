@@ -1,0 +1,13 @@
+<section class="pagination">
+    <p> Showing page <%= infoPage.currentPage %> of <%= infoPage.totalPages %></p>
+    <% if(infoPage.prevPage) { %>
+    <a href="<%=path%>?page=<%= infoPage.prevPage %>" class="btn">Previous</a>
+    <% } %>
+    <span>Page <%= infoPage.currentPage %> of <%= infoPage.totalPages %></span>
+
+    <% if(infoPage.nextPage) { %>
+    <a href="<%=path%>?page=<%= infoPage.nextPage %>" class="btn">Next</a>
+    <% } %>
+    
+    <p> Showing <%= infoPage.currentProducts %> of <%= infoPage.totalItems %> products</p>
+</section>

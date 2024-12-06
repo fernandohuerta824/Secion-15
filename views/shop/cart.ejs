@@ -1,0 +1,50 @@
+<%- include('../includes/head.ejs') %>
+    </head>
+
+    <body>
+        <%- include('../includes/header.ejs') %>
+
+        <main>
+            <% if(cart.products.length > 0) { %>
+                <ul>
+                <% cart.products.forEach(p => { %>
+                    
+                    <li>
+                        <p>Name: <%=p.title%></p>
+                        <p>Quantity: <%=p.quantity%> </p>
+                        <p>Price: $<%=p.price%> </p>
+                        <p>Total Price: $<%=p.itemPrice%> </p>
+                        <img src="<%= p.imageURL %>" alt="<%=p.title%>" width="150" style="display: block; margin-bottom: 10px;">
+                        <form action="/cart-delete" method="post">
+                            <input type="hidden" name="id" id="id" value="<%= p._id %>">
+                            <button type="submit" class="btn">Delete Product</button>
+                        </form>
+                    </li>
+    
+                <% }) %>
+                </ul>
+                <p>Total Price: $<%= cart.totalPrice %></p>
+
+                <div>
+                    <button class="btn" type="submit" id="order-btn">Pay</button>
+                    <script src="https://js.stripe.com/v3/"></script>
+                    <script>
+                        const sessionId = '<%= sessionId %>'
+                        if(sessionId) {
+                            const stripe = Stripe('pk_test_51Q9XvEFg7N67dTvFMK9yrYX8l1wsD38TEVnzMGUgfSsasQ0s5PoTRuwQnpuK9rld8Fmih13Hky79ARSiNxkoso0e00Xr64So9p')
+                            const order = document.querySelector('#order-btn')
+    
+                            order.addEventListener('click', e => {
+                                stripe.redirectToCheckout({
+                                    sessionId:'<%= sessionId %>'
+                                })
+                            })
+                        }
+                    </script>
+                </div>
+
+            <% } else { %>
+                <h1>No products yet, Go Buy</h1>
+            <% } %>
+        </main>
+<%- include('../includes/footer.ejs') %>

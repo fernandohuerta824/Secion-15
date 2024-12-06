@@ -1,0 +1,40 @@
+<%- include('../includes/head.ejs') %>
+    </head>
+
+    <body>
+        <%- include('../includes/header.ejs') %>
+        <main>
+            <% if(orders.length > 0) { %>
+                <ul>
+                    <% orders.forEach(o => { %>
+                    <li>
+                        Order: <%= o._id %>
+
+                        <ul>
+                            <% o.products.forEach(p => { %>
+                                <li>
+                                    <p>Name: <%= p.title %></p>
+                                    <img src="<%= p.imageURL %>" alt="<%= p.title %>" width="100">
+                                    <p>Price: $<%= p.price %></p>
+                                    <p>Total: $<%=p.itemPrice %></p>
+                                    <p>Quantity: <%=p.quantity%></p>
+
+                                </li>
+                            <% }) %>
+                        </ul>
+                        <p>Total: $<%= o.totalPrice%></p>
+                        <p>Date: <%= new Date(o.date).toLocaleDateString() %></p>
+                        <form action="/invoice" method="post">
+                            <input type="hidden" name="id" value="<%= o._id %>">
+                            <button class="btn" type="submit">Generate Invoice</button>
+                        </form>
+                    </li>
+                    
+                    <% })  %>
+                </ul>
+            <%} else { %>
+                <h1>No Orders, Go buy!</h1>
+            <% } %>
+        </main>
+       
+        <%- include('../includes/footer.ejs') %>

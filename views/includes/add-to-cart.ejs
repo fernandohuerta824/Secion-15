@@ -1,0 +1,7 @@
+<% if (isLoggedIn) { %>
+    <form action="/cart" method="post">
+        <input type="hidden" name="_csrfAddToCart" id="csfr" value="<%= locals.csrfToken %>">
+        <input type="hidden" name="id" id="id" value="<%= product._id %>">
+        <button type="submit"  class="btn">Add to Cart</button>
+    </form>
+<% } %>
